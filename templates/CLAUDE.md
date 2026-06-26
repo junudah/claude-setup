@@ -6,20 +6,26 @@ Instructions de session pour Claude Code.
 
 1. Lis `user.md` — qui je suis, mon business, mes outils.
 2. Lis `environment.md` — ma stack et mes chemins.
-3. Charge les clés API si le fichier existe : `source {{BRAIN_PATH}}/secrets/keystore.env`
+3. Charge les clés API : `source {{BRAIN_PATH}}/00-system/secrets/keystore.env`
+4. Si question business → lis `01-identity/profil.md` + `03-business/`.
+5. Si question objectifs → lis `02-goals/objectifs.md`.
 
 ## Structure
 
 - `user.md` — profil utilisateur
 - `environment.md` — environnement machine
+- `00-system/` — secrets/ (clés API) + scripts/
+- `01-identity/` — profil.md (qui je suis) + voix.md (comment je parle)
+- `02-goals/` — objectifs.md (cap, priorités)
+- `03-business/` — données business par profil
+- `10-projects/` — un sous-dossier par projet actif
+- `inbox/` — capture brute, idées non triées
+- `90-archive/` — tout ce qu'on ne supprime jamais
 - `skills/` — anthropics/skills + agency-agents
-- `projects/` — notes par projet (un sous-dossier par projet)
-- `memory/` — mémoire long terme cross-sessions
-- `secrets/` — clés API (jamais commiter)
+- `memory/` — logs cross-sessions (auto-généré par le hook)
 
 ## Règles absolues
 
 1. **Ne jamais afficher une clé API** en clair dans une réponse ou un log.
-2. **Ne jamais supprimer** un fichier sans archiver d'abord.
-3. **Mettre à jour `memory/`** quand une décision ou un contexte important est établi.
-4. **Tutoyer** — l'utilisateur préfère la communication directe.
+2. **Ne jamais supprimer** un fichier — archiver dans `90-archive/` d'abord.
+3. **Tutoyer** — l'utilisateur préfère la communication directe.

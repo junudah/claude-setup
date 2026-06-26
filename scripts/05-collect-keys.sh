@@ -7,7 +7,7 @@ source "$SCRIPT_DIR/lib/ask.sh"
 
 [ -f /tmp/claude-setup-env.sh ] && source /tmp/claude-setup-env.sh
 BRAIN_PATH="${CS_BRAIN_PATH:-$HOME/second-brain}"
-KEYSTORE="$BRAIN_PATH/secrets/keystore.env"
+KEYSTORE="$BRAIN_PATH/00-system/secrets/keystore.env"
 
 log_step "05" "Clé API Anthropic (pour la mémoire automatique)"
 
@@ -27,8 +27,8 @@ if [ -z "$ANTHROPIC_KEY" ]; then
   exit 0
 fi
 
-mkdir -p "$BRAIN_PATH/secrets"
-chmod 700 "$BRAIN_PATH/secrets"
+mkdir -p "$BRAIN_PATH/00-system/secrets"
+chmod 700 "$BRAIN_PATH/00-system/secrets"
 touch "$KEYSTORE"
 chmod 600 "$KEYSTORE"
 

@@ -11,7 +11,7 @@ def load_api_key(brain_path: Path) -> str:
     key = os.environ.get('ANTHROPIC_API_KEY', '')
     if key:
         return key
-    keystore = brain_path / 'secrets' / 'keystore.env'
+    keystore = brain_path / '00-system' / 'secrets' / 'keystore.env'
     if keystore.exists():
         for line in keystore.read_text().splitlines():
             if line.startswith('ANTHROPIC_API_KEY='):
