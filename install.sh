@@ -47,6 +47,7 @@ bash "$SCRIPT_DIR/scripts/01-init-second-brain.sh"
 bash "$SCRIPT_DIR/scripts/02-install-clis.sh"
 bash "$SCRIPT_DIR/scripts/03-install-skills.sh"
 bash "$SCRIPT_DIR/scripts/04-setup-mcp.sh"
+bash "$SCRIPT_DIR/scripts/05-collect-keys.sh"
 
 [ -f /tmp/claude-setup-env.sh ] && source /tmp/claude-setup-env.sh
 

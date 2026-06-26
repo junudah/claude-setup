@@ -19,7 +19,7 @@ if [ -d "$BRAIN_PATH" ] && [ -f "$BRAIN_PATH/user.md" ]; then
   exit 0
 fi
 
-mkdir -p "$BRAIN_PATH"/{skills,projects,memory,secrets}
+mkdir -p "$BRAIN_PATH"/{skills,projects,memory,secrets,hooks,.claude}
 chmod 700 "$BRAIN_PATH/secrets"
 log_ok "Structure créée : $BRAIN_PATH"
 
@@ -57,6 +57,16 @@ sed -e "s|{{NAME}}|$USER_NAME|g" \
     -e "s|{{BRAIN_PATH}}|$BRAIN_PATH|g" \
     "$TEMPLATES_DIR/CLAUDE.md" > "$BRAIN_PATH/CLAUDE.md"
 log_ok "CLAUDE.md créé"
+
+# Hook mémoire automatique
+cp "$SCRIPT_DIR/../hooks/memory-logger.py" "$BRAIN_PATH/hooks/memory-logger.py"
+chmod +x "$BRAIN_PATH/hooks/memory-logger.py"
+log_ok "memory-logger.py installé"
+
+# settings.json Claude Code (active le hook Stop)
+sed -e "s|{{BRAIN_PATH}}|$BRAIN_PATH|g" \
+    "$TEMPLATES_DIR/settings.json" > "$BRAIN_PATH/.claude/settings.json"
+log_ok "Hook Stop configuré → memory/log.md après chaque session"
 
 {
   echo "export CS_BRAIN_PATH=\"$BRAIN_PATH\""
