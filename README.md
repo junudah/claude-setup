@@ -13,7 +13,6 @@ by **Rayan** · [@rayuqi](https://youtube.com/@rayuqi)
 - **CLAUDE.md** — instructions de session personnalisées
 - **anthropics/skills** — skills officiels Anthropic
 - **agency-agents** — 32 sub-agents spécialisés
-- **GitHub CLI** (`gh`) — si pas déjà installé
 - **MCP Playwright** — automatisation navigateur
 
 ## Option 1 — Via Claude Code (recommandé)

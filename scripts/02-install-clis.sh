@@ -43,18 +43,4 @@ else
   log_skip "Claude Code déjà installé"
 fi
 
-# GitHub CLI
-if ! command -v gh >/dev/null 2>&1; then
-  log_info "Installation de GitHub CLI…"
-  install_brew_pkg gh
-  log_info "Authentifie-toi avec : gh auth login"
-else
-  log_skip "gh déjà installé"
-  if gh auth status >/dev/null 2>&1; then
-    log_ok "gh authentifié"
-  else
-    log_warn "gh non authentifié — lance : gh auth login"
-  fi
-fi
-
 log_done "CLIs prêts"

@@ -24,7 +24,7 @@ Détecté automatiquement à l'installation.
 
 ## CLIs disponibles
 
-`claude` · `gh` · `node` · `python3` · `jq`
+`claude` · `node` · `python3` · `jq`
 
 ## MCP actifs
 
