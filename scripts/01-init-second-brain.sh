@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib/colors.sh"
+source "$SCRIPT_DIR/lib/log.sh"
+source "$SCRIPT_DIR/lib/ask.sh"
+
+[ -f /tmp/claude-setup-env.sh ] && source /tmp/claude-setup-env.sh
+
+log_step "01" "Initialisation du Second Cerveau"
+
+DEFAULT_BRAIN="$HOME/second-brain"
+BRAIN_PATH="$(ask "Où créer ton Second Cerveau" "$DEFAULT_BRAIN")"
+BRAIN_PATH="${BRAIN_PATH/#\~/$HOME}"
+
+if [ -d "$BRAIN_PATH" ] && [ -f "$BRAIN_PATH/user.md" ]; then
+  log_skip "Second Cerveau déjà présent à $BRAIN_PATH — préservé."
+  echo "export CS_BRAIN_PATH=\"$BRAIN_PATH\"" >> /tmp/claude-setup-env.sh
+  exit 0
+fi
+
+mkdir -p "$BRAIN_PATH"/{skills,projects,memory,secrets}
+chmod 700 "$BRAIN_PATH/secrets"
+log_ok "Structure créée : $BRAIN_PATH"
+
+TEMPLATES_DIR="$SCRIPT_DIR/../templates"
+
+# Questions profil
+USER_NAME="$(ask "Ton prénom")"
+USER_BUSINESS="$(ask "Ton type de business (ex: coaching, e-com, infopreneuriat)")"
+USER_TOOLS="$(ask "Tes outils principaux (ex: Calendly, iClosed, ManyChat)")"
+USER_LEVEL="$(ask_choice_inline "Niveau Claude Code" "débutant intermédiaire avancé" "débutant")"
+
+sed -e "s|{{NAME}}|$USER_NAME|g" \
+    -e "s|{{BUSINESS}}|$USER_BUSINESS|g" \
+    -e "s|{{TOOLS}}|$USER_TOOLS|g" \
+    -e "s|{{LEVEL}}|$USER_LEVEL|g" \
+    "$TEMPLATES_DIR/user.md" > "$BRAIN_PATH/user.md"
+log_ok "user.md créé"
+
+OS_VAL="${CS_OS:-$(uname -s)}"
+ARCH_VAL="${CS_ARCH:-$(uname -m)}"
+SHELL_VAL="${CS_SHELL:-$SHELL}"
+NODE_VAL="$(command -v node 2>/dev/null && node --version 2>/dev/null || echo 'non installé')"
+PYTHON_VAL="$(command -v python3 2>/dev/null && python3 --version 2>/dev/null || echo 'non installé')"
+
+sed -e "s|{{OS}}|$OS_VAL|g" \
+    -e "s|{{ARCH}}|$ARCH_VAL|g" \
+    -e "s|{{SHELL}}|$SHELL_VAL|g" \
+    -e "s|{{NODE}}|$NODE_VAL|g" \
+    -e "s|{{PYTHON}}|$PYTHON_VAL|g" \
+    -e "s|{{BRAIN_PATH}}|$BRAIN_PATH|g" \
+    "$TEMPLATES_DIR/environment.md" > "$BRAIN_PATH/environment.md"
+log_ok "environment.md créé"
+
+sed -e "s|{{NAME}}|$USER_NAME|g" \
+    -e "s|{{BRAIN_PATH}}|$BRAIN_PATH|g" \
+    "$TEMPLATES_DIR/CLAUDE.md" > "$BRAIN_PATH/CLAUDE.md"
+log_ok "CLAUDE.md créé"
+
+{
+  echo "export CS_BRAIN_PATH=\"$BRAIN_PATH\""
+  echo "export CS_USER_NAME=\"$USER_NAME\""
+} >> /tmp/claude-setup-env.sh
+
+log_done "Second Cerveau initialisé"

@@ -1,0 +1,6 @@
+secrets/
+*.env
+*.env.local
+keystore.env
+/tmp/
+.DS_Store
