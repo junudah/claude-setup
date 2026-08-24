@@ -46,8 +46,9 @@ log_ok "user.md créé"
 OS_VAL="${CS_OS:-$(uname -s)}"
 ARCH_VAL="${CS_ARCH:-$(uname -m)}"
 SHELL_VAL="${CS_SHELL:-$SHELL}"
-NODE_VAL="$(command -v node 2>/dev/null && node --version 2>/dev/null || echo 'non installé')"
-PYTHON_VAL="$(command -v python3 2>/dev/null && python3 --version 2>/dev/null || echo 'non installé')"
+# une seule ligne par valeur : sed casse sur un retour à la ligne
+NODE_VAL="$(node --version 2>/dev/null || echo 'non installé')"
+PYTHON_VAL="$(python3 --version 2>/dev/null || echo 'non installé')"
 
 sed -e "s|{{OS}}|$OS_VAL|g" \
     -e "s|{{ARCH}}|$ARCH_VAL|g" \
@@ -64,9 +65,9 @@ sed -e "s|{{NAME}}|$USER_NAME|g" \
 log_ok "CLAUDE.md créé"
 
 # Templates identité et objectifs (fichiers vides prêts à remplir)
-cp "$TEMPLATES_DIR/01-identity/profil.md" "$BRAIN_PATH/01-identity/profil.md"
-cp "$TEMPLATES_DIR/01-identity/voix.md"   "$BRAIN_PATH/01-identity/voix.md"
-cp "$TEMPLATES_DIR/02-goals/objectifs.md" "$BRAIN_PATH/02-goals/objectifs.md"
+for tpl in 01-identity/profil.md 01-identity/voix.md 02-goals/objectifs.md; do
+  sed "s|{{NAME}}|$USER_NAME|g" "$TEMPLATES_DIR/$tpl" > "$BRAIN_PATH/$tpl"
+done
 log_ok "01-identity/ et 02-goals/ créés"
 
 # Hook mémoire automatique

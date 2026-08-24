@@ -46,8 +46,9 @@ bash "$SCRIPT_DIR/scripts/00-detect-system.sh"
 bash "$SCRIPT_DIR/scripts/01-init-second-brain.sh"
 bash "$SCRIPT_DIR/scripts/02-install-clis.sh"
 bash "$SCRIPT_DIR/scripts/03-install-skills.sh"
-bash "$SCRIPT_DIR/scripts/04-setup-mcp.sh"
+bash "$SCRIPT_DIR/scripts/04-setup-browser.sh"
 bash "$SCRIPT_DIR/scripts/05-collect-keys.sh"
+bash "$SCRIPT_DIR/scripts/06-create-agent.sh"
 
 [ -f /tmp/claude-setup-env.sh ] && source /tmp/claude-setup-env.sh
 
@@ -60,7 +61,8 @@ cat <<EOF
   Second Cerveau  : $BRAIN_PATH/
   Skills          : $BRAIN_PATH/skills/anthropics/ + agency-agents/
   Sub-agents      : ~/.claude/agents/
-  MCP             : playwright
+  Navigateur      : playwright + opencli (CLI, aucun MCP)
+  Agent perso     : ${CS_AGENT_ID:-aucun}
 
   ─────────────────────────────────────────
 
