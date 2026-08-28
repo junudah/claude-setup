@@ -46,11 +46,11 @@ sed -e "s|{{AGENT_ID}}|$AGENT_ID|g" \
     "$SCRIPT_DIR/../templates/soul.md" > "$AGENT_DIR/soul.md"
 log_ok "Agent $AGENT_ID créé : $AGENT_DIR/soul.md"
 
-# Le CLAUDE.md du Second Cerveau doit pointer vers le soul
-if [ -f "$BRAIN_PATH/CLAUDE.md" ] && ! grep -q "agents/$AGENT_ID/soul.md" "$BRAIN_PATH/CLAUDE.md"; then
+# AGENTS.md doit pointer vers le soul
+if [ -f "$BRAIN_PATH/AGENTS.md" ] && ! grep -q "agents/$AGENT_ID/soul.md" "$BRAIN_PATH/AGENTS.md"; then
   printf '\n## Agent perso\n\nLis `agents/%s/soul.md` au démarrage — c'"'"'est ton identité sur ce Second Cerveau.\n' \
-    "$AGENT_ID" >> "$BRAIN_PATH/CLAUDE.md"
-  log_ok "CLAUDE.md pointe vers agents/$AGENT_ID/soul.md"
+    "$AGENT_ID" >> "$BRAIN_PATH/AGENTS.md"
+  log_ok "AGENTS.md pointe vers agents/$AGENT_ID/soul.md"
 fi
 
 echo "export CS_AGENT_ID=\"$AGENT_ID\"" >> /tmp/claude-setup-env.sh

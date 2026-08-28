@@ -15,7 +15,20 @@ if ! command -v git >/dev/null 2>&1; then
   exit 0
 fi
 
-mkdir -p "$BRAIN_PATH/skills" "$HOME/.claude/skills"
+mkdir -p "$BRAIN_PATH/skills"
+
+# Où poser skills et sub-agents : même format SKILL.md des deux côtés, seul le chemin change.
+SKILL_DIRS=(); AGENT_DIRS=()
+for a in ${CS_AGENTS:-claude}; do
+  case "$a" in
+    claude) SKILL_DIRS+=("$HOME/.claude/skills"); AGENT_DIRS+=("$HOME/.claude/agents") ;;
+    cursor) SKILL_DIRS+=("$HOME/.cursor/skills"); AGENT_DIRS+=("$HOME/.cursor/agents") ;;
+    codex)  log_info "Codex : pas de dossier skills — le Second Cerveau passe par AGENTS.md." ;;
+  esac
+done
+[ ${#SKILL_DIRS[@]} -eq 0 ] && SKILL_DIRS=("$HOME/.claude/skills")
+[ ${#AGENT_DIRS[@]} -eq 0 ] && AGENT_DIRS=("$HOME/.claude/agents")
+mkdir -p "${SKILL_DIRS[@]}"
 
 # 1) anthropics/skills
 TARGET_ANTHROPIC="$BRAIN_PATH/skills/anthropics"
@@ -31,14 +44,17 @@ else
   fi
 fi
 
-# Symlink skills anthropic dans ~/.claude/skills si pas déjà là
-if [ -d "$TARGET_ANTHROPIC/skills" ] && [ ! -L "$HOME/.claude/skills/anthropics" ]; then
-  ln -sf "$TARGET_ANTHROPIC/skills" "$HOME/.claude/skills/anthropics"
-  log_ok "Symlink ~/.claude/skills/anthropics → créé"
+# Symlink des skills anthropic dans chaque agent détecté
+if [ -d "$TARGET_ANTHROPIC/skills" ]; then
+  for d in "${SKILL_DIRS[@]}"; do
+    [ -L "$d/anthropics" ] && continue
+    ln -sf "$TARGET_ANTHROPIC/skills" "$d/anthropics"
+    log_ok "Symlink $d/anthropics → créé"
+  done
 fi
 
 # 2) agency-agents (sub-agents)
-if ask_yes_no "Installer les sub-agents Agency (~/.claude/agents/) ?" "y"; then
+if ask_yes_no "Installer les sub-agents Agency (${AGENT_DIRS[*]}) ?" "y"; then
   TARGET_AGENCY="$BRAIN_PATH/skills/agency-agents"
   if [ -d "$TARGET_AGENCY/.git" ]; then
     log_skip "agency-agents déjà cloné — pull"
@@ -53,15 +69,15 @@ if ask_yes_no "Installer les sub-agents Agency (~/.claude/agents/) ?" "y"; then
   fi
 
   if [ -d "$TARGET_AGENCY" ]; then
-    mkdir -p "$HOME/.claude/agents"
+    mkdir -p "${AGENT_DIRS[@]}"
     COUNT=0
     while IFS= read -r -d '' file; do
       base="$(basename "$file")"
       case "$base" in README*|LICENSE*|CONTRIBUTING*|CHANGELOG*) continue ;; esac
-      cp "$file" "$HOME/.claude/agents/$base"
+      for d in "${AGENT_DIRS[@]}"; do cp "$file" "$d/$base"; done
       COUNT=$((COUNT + 1))
     done < <(find "$TARGET_AGENCY" -type f -name "*.md" ! -path "*/.git/*" -print0)
-    log_ok "$COUNT sub-agents copiés vers ~/.claude/agents/"
+    log_ok "$COUNT sub-agents copiés vers ${AGENT_DIRS[*]}"
   fi
 fi
 

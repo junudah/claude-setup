@@ -1,6 +1,7 @@
 # Second Cerveau — {{NAME}}
 
-Instructions de session pour Claude Code.
+Instructions de session. Lu automatiquement par Claude Code (via `CLAUDE.md`), Codex et Cursor —
+un seul fichier, les trois agents.
 
 ## Au démarrage de chaque conversation
 
@@ -22,7 +23,7 @@ Instructions de session pour Claude Code.
 - `inbox/` — capture brute, idées non triées
 - `90-archive/` — tout ce qu'on ne supprime jamais
 - `skills/` — anthropics/skills + agency-agents
-- `memory/` — logs cross-sessions (auto-généré par le hook)
+- `memory/` — logs cross-sessions (auto-généré par le hook Stop, Claude Code uniquement)
 
 ## Règles absolues
 

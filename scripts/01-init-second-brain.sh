@@ -59,10 +59,13 @@ sed -e "s|{{OS}}|$OS_VAL|g" \
     "$TEMPLATES_DIR/environment.md" > "$BRAIN_PATH/environment.md"
 log_ok "environment.md créé"
 
+# AGENTS.md = le seul fichier d'instructions. Claude Code lit CLAUDE.md, Codex et Cursor lisent
+# AGENTS.md : on écrit l'un et on pointe l'autre dessus, jamais deux copies à maintenir.
 sed -e "s|{{NAME}}|$USER_NAME|g" \
     -e "s|{{BRAIN_PATH}}|$BRAIN_PATH|g" \
-    "$TEMPLATES_DIR/CLAUDE.md" > "$BRAIN_PATH/CLAUDE.md"
-log_ok "CLAUDE.md créé"
+    "$TEMPLATES_DIR/AGENTS.md" > "$BRAIN_PATH/AGENTS.md"
+printf '@AGENTS.md\n' > "$BRAIN_PATH/CLAUDE.md"
+log_ok "AGENTS.md créé (Claude Code · Codex · Cursor) + CLAUDE.md qui pointe dessus"
 
 # Templates identité et objectifs (fichiers vides prêts à remplir)
 for tpl in 01-identity/profil.md 01-identity/voix.md 02-goals/objectifs.md; do
@@ -70,15 +73,16 @@ for tpl in 01-identity/profil.md 01-identity/voix.md 02-goals/objectifs.md; do
 done
 log_ok "01-identity/ et 02-goals/ créés"
 
-# Hook mémoire automatique
-cp "$SCRIPT_DIR/../hooks/memory-logger.py" "$BRAIN_PATH/hooks/memory-logger.py"
-chmod +x "$BRAIN_PATH/hooks/memory-logger.py"
-log_ok "memory-logger.py installé"
-
-# settings.json Claude Code (active le hook Stop)
-sed -e "s|{{BRAIN_PATH}}|$BRAIN_PATH|g" \
-    "$TEMPLATES_DIR/settings.json" > "$BRAIN_PATH/.claude/settings.json"
-log_ok "Hook Stop configuré → memory/log.md après chaque session"
+# Hook mémoire automatique — Claude Code seulement (Codex et Cursor n'ont pas de hook Stop)
+if [[ " ${CS_AGENTS:-claude} " == *" claude "* ]]; then
+  cp "$SCRIPT_DIR/../hooks/memory-logger.py" "$BRAIN_PATH/hooks/memory-logger.py"
+  chmod +x "$BRAIN_PATH/hooks/memory-logger.py"
+  sed -e "s|{{BRAIN_PATH}}|$BRAIN_PATH|g" \
+      "$TEMPLATES_DIR/settings.json" > "$BRAIN_PATH/.claude/settings.json"
+  log_ok "Hook Stop configuré → memory/log.md après chaque session"
+else
+  log_skip "Mémoire auto : Claude Code seulement — sur Codex/Cursor, écris dans memory/ à la main."
+fi
 
 # Dossiers 03-business selon le profil
 case "$USER_PROFILE" in

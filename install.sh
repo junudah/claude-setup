@@ -31,7 +31,7 @@ cat <<'EOF'
 
 EOF
 
-printf "${C_BCYAN}Configure ton Second Cerveau Claude Code en 5 minutes.${C_RESET}\n\n"
+printf "${C_BCYAN}Configure ton Second Cerveau en 5 minutes — Claude Code, Codex ou Cursor.${C_RESET}\n\n"
 
 if ! ask_yes_no "On commence ?" "y"; then
   echo "Bye."
@@ -59,16 +59,19 @@ log_section "SETUP TERMINÉ"
 cat <<EOF
 
   Second Cerveau  : $BRAIN_PATH/
+  Instructions    : $BRAIN_PATH/AGENTS.md (+ CLAUDE.md qui pointe dessus)
+  Agents branchés : ${CS_AGENTS:-aucun}
   Skills          : $BRAIN_PATH/skills/anthropics/ + agency-agents/
-  Sub-agents      : ~/.claude/agents/
   Navigateur      : playwright + opencli (CLI, aucun MCP)
   Agent perso     : ${CS_AGENT_ID:-aucun}
 
   ─────────────────────────────────────────
 
-  Pour démarrer :
-    cd $BRAIN_PATH && claude
+  Pour démarrer, depuis $BRAIN_PATH :
+    claude          (lit CLAUDE.md → AGENTS.md)
+    codex           (lit AGENTS.md)
+    cursor .        (lit AGENTS.md)
 
-  Claude Code connaîtra ton business dès la première phrase.
+  Ton agent connaîtra ton business dès la première phrase.
 
 EOF

@@ -4,11 +4,13 @@
 
 # Claude Setup
 
-### Ton business dans la tête de Claude Code, en moins de 5 minutes.
+### Ton business dans la tête de ton agent, en moins de 5 minutes.
+
+<sub>Claude Code · Codex · Cursor — un seul cerveau, un seul fichier d'instructions.</sub>
 
 <img src="assets/banner.png" alt="claude setup — github repo" width="720">
 
-Un dossier que Claude relit à chaque session : ton profil, ta stack,<br>tes projets, ta mémoire. Tourne en local, s'installe en une commande,<br>et se souvient de toi à la session d'après.
+Un dossier que ton agent relit à chaque session : ton profil, ta stack,<br>tes projets, ta mémoire. Tourne en local, s'installe en une commande,<br>et se souvient de toi à la session d'après.
 
 <br>
 
@@ -28,11 +30,19 @@ Un dossier que Claude relit à chaque session : ton profil, ta stack,<br>tes pro
 
 <sub>Skill conversationnel · Second Cerveau · mémoire automatique · skills Anthropic · 32 sub-agents · Playwright CLI + opencli · 100 % local, zéro serveur</sub>
 
+<br>
+
+<sub>**Aussi compatible Codex et Cursor** — le nom dit Claude, le cerveau ne lui est pas réservé.</sub>
+
 </div>
 
 ---
 
-`claude-setup` est un skill conversationnel qui fait à ta place tout ce qu'il faut configurer après avoir installé Claude Code : Second Cerveau, CLIs, skills, sub-agents, automatisation navigateur et clé API. Une commande, ~6 questions, et Claude connaît ton business dès la première phrase.
+`claude-setup` est un skill conversationnel qui fait à ta place tout ce qu'il faut configurer après avoir installé ton agent (Claude Code, Codex ou Cursor) : Second Cerveau, CLIs, skills, sub-agents, automatisation navigateur et clé API. Une commande, ~6 questions, et ton agent connaît ton business dès la première phrase.
+
+> **Compatible Codex et Cursor.** Le repo s'appelle `claude-setup` parce qu'il est né sur Claude Code, mais le Second Cerveau qu'il installe n'a rien de spécifique à Claude : les trois agents lisent exactement le même dossier.
+
+**Comment** : `AGENTS.md` à la racine du Second Cerveau est le seul fichier d'instructions — Codex et Cursor le lisent nativement, Claude Code le lit via un `CLAUDE.md` d'une ligne qui l'importe. Ce qui reste propre à Claude Code est annoncé comme tel : le hook `Stop` de mémoire automatique. Les skills et sub-agents s'installent dans `~/.claude/` et `~/.cursor/` (même format `SKILL.md`) ; Codex n'a pas de dossier skills et passe uniquement par `AGENTS.md`.
 
 ## Quick start
 
